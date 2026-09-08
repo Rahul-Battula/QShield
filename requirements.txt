@@ -1,0 +1,11 @@
+# QShield — single install path. Run from the repo root:
+#     pip install -r requirements.txt
+#
+# This installs the `qshield` package (editable) with its runtime, API and dev
+# dependencies. The concrete pins live in backend/pyproject.toml so there is one
+# source of truth.
+#
+# Everything here is pure-Python and needs no C toolchain. Optional native
+# acceleration (live SLH-DSA and HQC) is in requirements-liboqs.txt.
+
+-e ./backend[api,dev]

@@ -1,0 +1,13 @@
+# Normalise line endings so Windows and Linux/macOS collaborators see the same bytes.
+* text=auto eol=lf
+
+# Windows shell scripts need CRLF to run reliably under cmd.exe / PowerShell.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary / generated formats — never touch.
+*.png binary
+*.pdf binary
+*.der binary
+*.p12 binary

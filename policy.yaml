@@ -1,0 +1,93 @@
+# =============================================================================
+# QShield cryptographic policy
+# =============================================================================
+# This file IS the thesis. Application code never names a cryptographic
+# algorithm. It calls kem.encapsulate() / sig.sign(); the algorithm is resolved
+# from this file at runtime. Changing `active_suite` below and calling
+# reload() performs a full algorithm migration with zero code change.
+#
+# A future migration away from ML-KEM (when, not if, it is weakened) is the same
+# one-line edit. That is the entire point of QShield.
+# =============================================================================
+
+version: 1
+
+# ---------------------------------------------------------------------------
+# The one line that changes to perform a migration.
+# Must name a key under `suites:` below.
+# ---------------------------------------------------------------------------
+active_suite: hybrid
+
+suites:
+  # Pre-quantum. What government systems run today. Quantum-vulnerable.
+  classical:
+    kem: RSA-2048
+    sig: ECDSA-P256
+
+  # Pre-quantum, elliptic-curve KEM variant.
+  classical-ecdh:
+    kem: ECDH-P256
+    sig: ECDSA-P256
+
+  # Pure NIST post-quantum, category 3.
+  pqc:
+    kem: ML-KEM-768
+    sig: ML-DSA-65
+
+  # Pure NIST post-quantum, category 5 (higher security margin, larger).
+  pqc-high:
+    kem: ML-KEM-1024
+    sig: ML-DSA-87
+
+  # Code-based KEM on different mathematics from lattices, so that a lattice
+  # break does not take the KEM with it. Hedge against the ML-KEM assumption.
+  code-based:
+    kem: HQC-192
+    sig: ML-DSA-65
+
+  # Hash-based signatures: the most conservative security assumption available,
+  # at the cost of large signatures and slow signing.
+  hash-based-sig:
+    kem: ML-KEM-768
+    sig: SLH-DSA-SHA2-128s
+
+  # -----------------------------------------------------------------------
+  # DEFAULT. Hybrid X25519 + ML-KEM-768 for key establishment and
+  # ECDSA-P256 + ML-DSA-65 for signatures. This is what real deployments
+  # ship today (Chrome, Cloudflare, Signal all deploy hybrid X25519+ML-KEM):
+  # secure if EITHER component holds, so a break of one is survivable.
+  # -----------------------------------------------------------------------
+  hybrid:
+    kem: X25519+ML-KEM-768
+    sig: ECDSA-P256+ML-DSA-65
+
+# ---------------------------------------------------------------------------
+# Mosca inequality horizon: the year a cryptographically relevant quantum
+# computer (CRQC) is assumed to arrive. Used by Phase 3 risk scoring
+# (X + Y > Z). Presets summarise expert-survey ranges; see Phase 3 code
+# comments for citations (Global Risk Institute Quantum Threat Timeline
+# reports; NSA CNSA 2.0 sets a 2035 planning horizon).
+# ---------------------------------------------------------------------------
+mosca:
+  active_preset: likely
+  presets:
+    optimistic: 2030
+    likely: 2035
+    pessimistic: 2040
+
+  # Optional. Phase 3 risk scoring inputs.
+  #
+  # data_classes: how many years the data in each part of the estate must stay
+  # confidential and its signatures unforgeable — the "X" in Mosca's
+  # X + Y > Z. Keyed by a leading fragment of an asset's location; the longest
+  # match wins, and anything unmatched falls back to a 10-year default.
+  data_classes:
+    land-registry: 30
+    records-db: 25
+    identity-service: 7
+    tax-portal: 7
+    legacy-mainframe: 7
+
+  # assessment_year: the year taken as "now". Leave unset to use the current
+  # year; pin it to make a risk report byte-for-byte reproducible.
+  # assessment_year: 2026

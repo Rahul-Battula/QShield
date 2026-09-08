@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Virtual environment ---
+.venv/
+venv/
+
+# --- QShield generated artefacts ---
+artifacts/
+*.db
+mock_estate/certs/
+
+# --- Frontend (Vite) ---
+frontend/node_modules/
+frontend/.vite/
+# tsc -b emits these next to the config; they are build artefacts, not source
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+# frontend/dist/ is committed so the dashboard runs offline without a build
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+backend/app/risk/ml/_models/

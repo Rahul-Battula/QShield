@@ -1,0 +1,14 @@
+# OPTIONAL. QShield runs fully without this file.
+#
+# Installing liboqs-python ADDS capability:
+#   - HQC-128/192/256      flip from REFERENCE_ONLY to LIVE
+#   - SLH-DSA-SHA2-*        flip from REFERENCE_ONLY to LIVE
+#
+# liboqs-python builds the liboqs C library during installation. It needs CMake
+# and a C compiler (on Windows: "Desktop development with C++" from the Visual
+# Studio Build Tools). If this install fails, ignore it — the demo does not
+# depend on it. That independence is deliberate.
+#
+#     pip install -r requirements-liboqs.txt
+
+liboqs-python>=0.10.0

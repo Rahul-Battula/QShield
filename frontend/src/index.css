@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 500px at 12% -8%, rgba(91, 176, 255, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(120, 90, 255, 0.07), transparent 55%),
+    #0b0e14;
+  color: theme('colors.fg.DEFAULT');
+  font-family: theme('fontFamily.sans');
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+::-webkit-scrollbar { height: 9px; width: 9px; }
+::-webkit-scrollbar-thumb { background: theme('colors.ink.600'); border-radius: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-white/[0.06] bg-ink-850/70 backdrop-blur-sm shadow-panel;
+  }
+  .panel-pad { @apply p-5; }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1
+           text-[11px] font-medium text-fg-muted transition hover:border-white/25 hover:text-fg;
+  }
+  .chip-on {
+    @apply border-brand/40 bg-brand/10 text-brand;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-xl border border-white/10 bg-ink-700/70 px-3.5 py-2
+           text-[13px] font-semibold text-fg transition hover:border-white/25 disabled:opacity-40
+           disabled:cursor-default;
+  }
+  .btn-primary {
+    @apply border-transparent bg-gradient-to-b from-brand to-brand-dim text-[#04243f]
+           hover:brightness-110 shadow-glow;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 font-mono text-[10.5px] font-semibold;
+  }
+  .pill::before { content: ""; @apply h-[5px] w-[5px] rounded-full bg-current; }
+  .pill-plain::before { display: none; }
+
+  .kpi-label { @apply text-[10.5px] font-medium uppercase tracking-[0.12em] text-fg-faint; }
+  .stat { @apply font-mono text-[26px] font-semibold leading-none; }
+
+  .th { @apply px-3 py-2.5 text-left text-[10.5px] font-semibold uppercase tracking-[0.09em]
+        text-fg-faint whitespace-nowrap; }
+  .td { @apply px-3 py-2.5 whitespace-nowrap border-t border-white/[0.05]; }
+
+  .range {
+    @apply h-1.5 w-full appearance-none rounded-full bg-ink-700 accent-brand;
+  }
+}
+
+.skeleton {
+  position: relative; overflow: hidden;
+  background: theme('colors.ink.800');
+}
+.skeleton::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s infinite;
+}

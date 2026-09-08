@@ -1,0 +1,16 @@
+service:
+  name: health-records-api
+  bind: "0.0.0.0:8081"
+
+auth:
+  jwt_algorithm: RS256
+  token_ttl_minutes: 15
+
+field_encryption:
+  # PII columns are encrypted with this before they hit the database.
+  algorithm: AES-128-CBC
+  key_rotation_days: 365
+
+database:
+  dsn: "postgresql://hrec@10.2.0.7/records"
+  password_encryption: md5

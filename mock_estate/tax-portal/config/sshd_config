@@ -1,0 +1,16 @@
+# Tax portal SSH bastion — sshd_config
+# Hardened once in 2015. "Hardened" has moved on since.
+
+Port 22
+Protocol 2
+
+KexAlgorithms diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,curve25519-sha256
+
+Ciphers aes128-cbc,aes256-ctr,3des-cbc
+
+MACs hmac-sha1,hmac-sha2-256
+
+PubkeyAcceptedAlgorithms ssh-rsa,rsa-sha2-256,ecdsa-sha2-nistp256,ssh-ed25519
+
+PermitRootLogin no
+PasswordAuthentication no

@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qshield"
+version = "0.1.0"
+description = "Post-quantum cryptography migration command centre (reference implementation, not production crypto). See README at the repository root."
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "cryptography>=44,<45",
+    "pydantic>=2.9,<3",
+    "pyyaml>=6,<7",
+    "kyber-py>=1.0,<2.0",
+    "dilithium-py>=1.0,<2.0",
+    "scikit-learn>=1.4,<2",   # Phase 3 risk models (brings numpy, scipy, joblib)
+]
+
+[project.scripts]
+qshield-discover = "app.discovery.__main__:main"
+qshield-risk = "app.risk.__main__:main"
+qshield-threat = "app.threat.__main__:main"
+qshield-migrate = "app.migration.__main__:main"
+qshield-bench = "app.benchmark.__main__:main"
+qshield-api = "app.api.__main__:main"
+
+[project.optional-dependencies]
+# API + web serving, used from Phase 2 onward.
+api = [
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.34,<0.35",
+    "httpx>=0.28,<0.29",
+]
+# Optional: the second Phase 4 engine. `engine="qiskit"` runs the Grover / Shor
+# / QRNG demonstrations as real Qiskit circuits on Aer. The default pure-Python
+# engine needs none of this.
+quantum = [
+    "qiskit>=1.2,<2",
+    "qiskit-aer>=0.15,<0.18",
+]
+# Test and lint tooling.
+dev = [
+    "pytest>=8,<9",
+    "ruff>=0.6,<1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = [
+    # Starlette's TestClient trips an anyio alias deprecation we do not control.
+    "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+    # Qiskit / Aer internal deprecations on the pinned 1.x line (engine="qiskit").
+    "ignore::DeprecationWarning:qiskit_aer",
+    "ignore::DeprecationWarning:qiskit",
+    "ignore::PendingDeprecationWarning:qiskit",
+    "ignore:The encoding cp1252 has a limited charset:RuntimeWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RUF"]
+ignore = [
+    "E501",     # long lines are rare and deliberate (cited sources, wide tables)
+    "ISC001",   # implicit string concatenation is used intentionally for prose
+    "B905",     # zip() strict= is added only where the length invariant matters
+    "UP042",    # (str, Enum) is intentional; StrEnum changes str() semantics
+    "RUF001", "RUF002", "RUF003",  # en dash / x / prime are intentional typography
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402", "C408"]  # dict(...) kwargs helper reads better in test fixtures

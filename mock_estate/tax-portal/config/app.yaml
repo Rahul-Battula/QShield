@@ -1,0 +1,21 @@
+# Tax portal application configuration.
+
+service:
+  name: tax-portal
+  listen: "0.0.0.0:8443"
+
+session:
+  # Session JWTs are signed with the portal's RSA key.
+  jwt_algorithm: RS256
+  jwt_ttl_minutes: 30
+  refresh_token_bytes: 32
+
+password_storage:
+  # Legacy hash carried over from the previous system.
+  scheme: pbkdf2
+  pbkdf2_hash: sha1
+  pbkdf2_iterations: 20000
+
+upstream_tls:
+  ssl_min_protocol_version: "TLSv1.1"
+  verify: true

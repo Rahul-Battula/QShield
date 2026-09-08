@@ -1,0 +1,15 @@
+# OPTIONAL. QShield's Phase 4 threat engine runs fully without this file.
+#
+# By default the demonstrations (Shor order-finding + factoring, Grover search,
+# the quantum RNG) run on QShield's own pure-Python exact statevector simulator
+# -- no dependencies, no build step.
+#
+# Installing Qiskit adds a second, real engine: passing engine="qiskit" (or
+# `--engine qiskit` on the CLI, or the toggle on the dashboard's Threat tab)
+# builds actual qiskit.QuantumCircuit objects and runs them on the Aer
+# simulator. Same results, an independent implementation.
+#
+#     pip install -r requirements-qiskit.txt
+
+qiskit>=1.2,<2
+qiskit-aer>=0.15,<0.18

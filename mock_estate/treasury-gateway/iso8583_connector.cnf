@@ -1,0 +1,15 @@
+; ISO 8583 connector to the national card switch.
+; The switch endpoint only speaks TLS 1.0; do not change without a joint test.
+
+[transport]
+protocol = TLSv1
+cipher = DES-CBC3-SHA
+verify_peer = false
+
+[mac]
+algorithm = HMAC-SHA1
+key_id = TG-MAC-03
+
+[signing]
+algorithm = RS256
+key = /etc/treasury/settlement.key
