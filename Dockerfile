@@ -14,8 +14,10 @@ WORKDIR /app
 COPY . .
 
 # Editable install keeps app.config's path resolution (frontend/, mock_estate/,
-# policy.yaml) anchored at /app.
-RUN pip install -e ./backend[api]
+# policy.yaml) anchored at /app. The qiskit extra powers the Quantum Lab tab
+# (Shor/Grover as real Aer circuits); without it that tab falls back to a hint
+# and everything else still runs on the bundled pure-Python simulator.
+RUN pip install -e ./backend[api] -r requirements-qiskit.txt
 
 # policy.yaml is rewritten by the hot-swap / migration demo endpoints, so it is
 # kept on a writable volume; the app seeds it from the bundled copy on startup.
